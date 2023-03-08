@@ -1,0 +1,22 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/actvation_header">
+
+        <EditTextPreference
+            app:key="activation_text"
+            app:title="@string/activation_text_title"
+            app:dialogMessage=""
+            android:defaultValue="ml"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="consider_activation_text_register"
+            android:title="@string/consider_activation_text_register_title"/>
+
+
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

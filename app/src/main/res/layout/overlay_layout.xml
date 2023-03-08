@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/enterArgumentWindow"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/backButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/enter_argument"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button"
+            android:text="@string/Next"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/argument_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/select_argument"
+
+            android:textColor="@color/primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/frame"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/argument_title"
+            app:layout_constraintVertical_bias="0.0">
+
+            <!-- <RadioGroup
+                 android:layout_width="0dp"
+                 android:layout_height="0dp"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent">
+
+                 <RadioButton
+                     android:id="@+id/radioButton"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:buttonTint="@color/secondary"
+                     android:checked="true"
+
+                     android:text="@string/enter_value"
+                     android:textColor="@color/secondary"
+                     android:textColorHighlight="@color/secondary"
+                     android:textColorHint="@color/secondary"
+                     android:textColorLink="@color/secondary" />
+
+ -->
+            <EditText
+                android:id="@+id/custom_argument_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
+                android:hint="@string/enter_custon_argument_hint"
+                android:inputType="text"
+                android:minHeight="48dp"
+                android:textIsSelectable="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <requestFocus />
+            </EditText>
+
+                 <!--<RadioButton
+                     android:id="@+id/radioButton2"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:buttonTint="@color/secondary"
+                     android:text="@string/use_context_value"
+                     android:textColor="@color/secondary"
+                     android:textColorHint="@color/secondary" />
+             </RadioGroup> -->
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+     </androidx.constraintlayout.widget.ConstraintLayout>
+
+     <androidx.constraintlayout.widget.ConstraintLayout
+         android:id="@+id/macros_select_window"
+         android:layout_width="match_parent"
+         android:layout_height="0dp"
+         android:visibility="gone"
+         app:layout_constraintBottom_toTopOf="@+id/backButton"
+         app:layout_constraintLeft_toLeftOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+
+         app:layout_constraintTop_toTopOf="parent">
+
+
+         <androidx.constraintlayout.widget.ConstraintLayout
+             android:layout_width="0dp"
+             android:layout_height="0dp"
+             android:layout_marginTop="10dp"
+             android:layout_marginEnd="10dp"
+             android:layout_marginBottom="10dp"
+             android:background="@drawable/frame"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintHorizontal_bias="0.0"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/textView2"
+             app:layout_constraintVertical_bias="0.0">
+
+             <TextView
+                 android:id="@+id/pathText"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="16dp"
+                 android:layout_marginTop="8dp"
+                 android:text="/"
+                 android:textColor="@color/secondary"
+                 android:textSize="16sp"
+                 android:textStyle="italic"
+                 app:layout_constraintEnd_toEndOf="@+id/macrosRecycler"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <TextView
+                 android:id="@+id/macroses_not_found"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="@string/macroses_not_found"
+                 android:textColor="@color/secondary"
+                 android:textSize="20sp"
+                 android:textStyle="bold"
+                 android:visibility="gone"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintEnd_toEndOf="@+id/macrosRecycler"
+                 app:layout_constraintStart_toStartOf="@+id/macrosRecycler"
+                 app:layout_constraintTop_toTopOf="parent" />
+
+             <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/macrosRecycler"
+                 android:layout_width="0dp"
+                 android:layout_height="0dp"
+                 android:layout_marginStart="8dp"
+                 android:layout_marginTop="8dp"
+                 android:layout_marginEnd="8dp"
+                 android:layout_marginBottom="8dp"
+                 android:outlineAmbientShadowColor="@null"
+                 android:outlineSpotShadowColor="@null"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintHorizontal_bias="0.0"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@id/pathText"
+                 app:layout_constraintVertical_bias="1.0"
+                 tools:itemCount="1" />
+         </androidx.constraintlayout.widget.ConstraintLayout>
+
+         <TextView
+             android:id="@+id/textView2"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginStart="16dp"
+             android:layout_marginTop="16dp"
+             android:text="@string/selectMacros"
+
+             android:textColor="@color/primary"
+             android:textSize="20sp"
+             android:textStyle="bold"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent" />
+
+     </androidx.constraintlayout.widget.ConstraintLayout>
+
+     <Button
+         android:id="@+id/backButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginRight="8dp"
+         android:layout_marginBottom="8dp"
+         android:background="@drawable/button"
+         android:text="@string/back"
+         android:textColor="#FFFFFF"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintRight_toRightOf="parent"
+         tools:ignore="TextContrastCheck" />
+
+ </androidx.constraintlayout.widget.ConstraintLayout>
