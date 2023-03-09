@@ -86,7 +86,6 @@ public class MacrolineAccessibilityService extends AccessibilityService {
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-        Log.d("", "EVENT. " );
         if(sharedPreferences == null) sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         accessibilityNodeInfo = accessibilityEvent.getSource();
@@ -403,8 +402,11 @@ public class MacrolineAccessibilityService extends AccessibilityService {
     public void write(String msg){
 
         String text = source.getText() == null ? "" : source.getText().toString();
-        if(text.contains("ml"))
-            text = text.replace("ml", msg);
+
+        String activation_text = sharedPreferences.getString("activation_text", "ml");
+
+        if(text.endsWith(activation_text))
+            text = text.replace(activation_text, msg);
         else
             text += msg;
         setText(text);

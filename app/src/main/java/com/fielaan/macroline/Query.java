@@ -24,10 +24,6 @@ public class Query {
         macrolineAccessibilityService.closeWindow();
     }
 
-    public void logTest(String str){
-        Log.d("OK", "LOG TEST!!!!!!! ARGUMENT:" + str.toString());
-    }
-
     public void write(String msg){ //
 
         macrolineAccessibilityService.write(msg);

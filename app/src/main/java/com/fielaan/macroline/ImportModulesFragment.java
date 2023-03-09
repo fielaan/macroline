@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class ImportModulesFragment extends Fragment {
@@ -44,6 +46,7 @@ public class ImportModulesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Override
@@ -53,7 +56,7 @@ public class ImportModulesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_import_modules, container, false);
 
 
-
+        getWebModules();
         importModulePath = view.findViewById(R.id.import_module_path);
 
         view.findViewById(R.id.import_selected_module_butt).setOnClickListener(new View.OnClickListener() {
@@ -149,47 +152,6 @@ public class ImportModulesFragment extends Fragment {
         dialog.show();
     }
 
-    private File create(String name) {
-        File baseDir;
-
-        baseDir = new File("/data/data/com.fielaan.macroline/plugins/");
-
-        if (baseDir == null)
-            return Environment.getExternalStorageDirectory();
-
-        File folder = new File(baseDir, name);
-
-        if (folder.exists()) {
-            return folder;
-        }
-        if (folder.isFile()) {
-            folder.delete();
-        }
-        if (folder.mkdirs()) {
-            return folder;
-        }
-
-        return Environment.getExternalStorageDirectory();
-    }
-
-
-    public void writeFileOnInternalStorage(Context mcoContext, String sFileName, String sBody){
-        File dir = new File(mcoContext.getFilesDir(), "mydir");
-        if(!dir.exists()){
-            dir.mkdir();
-        }
-
-        try {
-            File gpxfile = new File(dir, sFileName);
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append(sBody);
-            writer.flush();
-            writer.close();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     private void copyFile(String inputPath, String inputFile, String outputPath, String outputFile) {
         Log.d("", "inputPath " + inputPath);
         Log.d("", "inputFile " + inputFile);
@@ -236,6 +198,21 @@ public class ImportModulesFragment extends Fragment {
 
     }
 
+
+    void getWebModules(){
+        try {
+            URL url = new URL("http://fielaan.ihostfull.com/modules-list.txt");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                Log.d("DATA", connection.getContent().toString());
+            } else {
+                Log.e("IMF", "response code != 200");
+            }
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 
 }
