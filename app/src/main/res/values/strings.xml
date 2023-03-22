@@ -10,7 +10,7 @@
     <string name="select_argument">Указание аргумента</string>
     <string name="enter_value">Ввод значения...</string>
     <string name="enter_custon_argument_hint">Введите текст...</string>
-    <string name="use_context_value">Использовать введенное значение</string>
+    <string name="use_context_value">Использовать введенное ранее значение</string>
     <string name="Next">Далее</string>
     <string name="title_activity_app">AppActivity</string>
 

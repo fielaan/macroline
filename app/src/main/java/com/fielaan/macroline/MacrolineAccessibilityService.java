@@ -24,7 +24,9 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
@@ -65,6 +67,8 @@ public class MacrolineAccessibilityService extends AccessibilityService {
     EditText customArgumentInput;
 
     String currentPath = "";
+
+    String textToReplace = ""; //Сюда указывается текст, который будет заменён при вызове setText()
 
     String activeModule;
 
@@ -167,7 +171,9 @@ public class MacrolineAccessibilityService extends AccessibilityService {
                 @Override
                 public void onClick(View view) {
                     Log.d("Back", "Back");
-                    windowManager.removeView(rootView);
+                    try {
+                        windowManager.removeView(rootView);
+                    }catch (Exception e){}
                 }
             });
 
@@ -211,9 +217,10 @@ public class MacrolineAccessibilityService extends AccessibilityService {
             showMacroses();
         } else if(type == Macros.macrosType.MACROS)
         {
-            LuaValue[] args = {LuaString.valueOf("123"), CoerceJavaToLua.coerce(new Query(accessibilityNodeInfo, this))};
+            LuaValue[] args = {CoerceJavaToLua.coerce(new Query(accessibilityNodeInfo, this))};
 
             currentLuaFile = runLuaFile(macroses.get(macros));
+            if(currentLuaFile == null) return;
 
             LuaValue resp = runLuaFunc(currentLuaFile,  "onInvoked", args);
 
@@ -322,7 +329,7 @@ public class MacrolineAccessibilityService extends AccessibilityService {
 
 
         for (int i = 0; i < screens.length; i++){
-            Log.d("INDEX", Integer.toString(i));
+            //Log.d("INDEX", Integer.toString(i));
             rootView.findViewById(screens[i]).setVisibility(i == index ? View.VISIBLE : View.GONE);
         }
 
@@ -338,6 +345,7 @@ public class MacrolineAccessibilityService extends AccessibilityService {
 
         customArgumentInput.setText("");
         customArgumentInput.setInputType(inputType);
+
         MacrolineAccessibilityService th = this;
 
         rootView.findViewById(R.id.enter_argument).setOnClickListener(new View.OnClickListener() {
@@ -348,9 +356,21 @@ public class MacrolineAccessibilityService extends AccessibilityService {
                     Log.e("ERROR", "active module is NULL");
                     return;
                 }
+                boolean useCustomArgument = ((RadioButton)rootView.findViewById(R.id.radio_enter_custom_argument)).isChecked();
 
-                LuaValue[] args = {LuaString.valueOf(customArgumentInput.getText().toString()),
+
+                if(!useCustomArgument)
+                    textToReplace = source.getText().toString().substring(0, source.getText().toString().length() - sharedPreferences.getString("activation_text", "ml").length());
+
+                LuaValue[] args = {LuaString.valueOf(
+                        useCustomArgument?
+                            customArgumentInput.getText().toString() : textToReplace),
                         CoerceJavaToLua.coerce(new Query(accessibilityNodeInfo, th))};
+
+
+
+                //LuaValue[] args = {LuaString.valueOf(customArgumentInput.getText().toString()),
+                //        CoerceJavaToLua.coerce(new Query(accessibilityNodeInfo, th))};
                 runLuaFunc(currentLuaFile, callback, args);
             }
         });
@@ -364,38 +384,57 @@ public class MacrolineAccessibilityService extends AccessibilityService {
     }
 
 
-    static Globals runLuaFile(String filename)
+    Globals runLuaFile(String filename)
     {
-        Globals globals = JsePlatform.standardGlobals();
-        globals.get("dofile").call(LuaValue.valueOf(filename));
-        return globals;
+        try {
+            Globals globals = JsePlatform.standardGlobals();
+            globals.get("dofile").call(LuaValue.valueOf(filename));
+            return globals;
+        }catch (Exception e)
+        {
+            closeWindow();
+            Toast toast = Toast.makeText(this,
+                    "При выполнении модуля произошла ошибка: " + e.getMessage() , Toast.LENGTH_LONG);
+            toast.show();
+            return null;
+        }
     }
 
 
 
-    static LuaValue runLuaFunc(Globals file, String func, LuaValue[] arguments) {
+    LuaValue runLuaFunc(Globals file, String func, LuaValue[] arguments) {
         //Globals globals = JsePlatform.standardGlobals();
         //globals.get("dofile").call(LuaValue.valueOf(filename));
         // chunk.call();
 
         //LuaValue f = globals.get(func);
-        LuaValue f = file.get(func);
-        LuaValue response = null;
+        try {
+            LuaValue f = file.get(func);
+            LuaValue response = null;
 
-        if(arguments == null || arguments.length == 0)
-            response = f.call();
-        else if(arguments.length == 1)
-            response = f.call(arguments[0]);
-        else if(arguments.length == 2)
-            response = f.call(arguments[0], arguments[1]);
-        else if(arguments.length == 3)
-            response = f.call(arguments[0], arguments[1], arguments[2]);
-        else{
-            Log.e("ERROR", "Unknown length of arguments array!");
+
+            if (arguments == null || arguments.length == 0)
+                response = f.call();
+            else if (arguments.length == 1)
+                response = f.call(arguments[0]);
+            else if (arguments.length == 2)
+                response = f.call(arguments[0], arguments[1]);
+            else if (arguments.length == 3)
+                response = f.call(arguments[0], arguments[1], arguments[2]);
+            else {
+                Log.e("ERROR", "Unknown length of arguments array!");
+            }
+            return response;
+        }catch (Exception e)
+        {
+            closeWindow();
+            Toast toast = Toast.makeText(this,
+                    "При выполнении модуля произошла ошибка: " + e.getMessage() , Toast.LENGTH_LONG);
+            toast.show();
+            return null;
         }
 
 
-        return response;
     }
 
 
@@ -405,10 +444,14 @@ public class MacrolineAccessibilityService extends AccessibilityService {
 
         String activation_text = sharedPreferences.getString("activation_text", "ml");
 
-        if(text.endsWith(activation_text))
-            text = text.replace(activation_text, msg);
-        else
-            text += msg;
+        if(text.toLowerCase().endsWith(activation_text.toLowerCase())) {
+            text = text.substring(0, text.length() - activation_text.length());
+        }
+        if(textToReplace != null && text.contains(textToReplace))
+        {
+            text = text.substring(0, text.length() - textToReplace.length());
+        }
+        text += msg;
         setText(text);
 
     }

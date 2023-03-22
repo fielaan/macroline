@@ -1,11 +1,12 @@
 package com.fielaan.macroline;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
-
+import com.fielaan.macroline.BuildConfig;
 import java.util.List;
 
 
@@ -30,6 +31,14 @@ public class Query {
 
     }
 
+    public int getApplicationVersionCode(){
+        return BuildConfig.VERSION_CODE;
+    }
+
+    public String getApplicationVersionName(){
+        return BuildConfig.VERSION_NAME;
+    }
+
     public void requestArgument(String title, int inputType, String callback){
         macrolineAccessibilityService.requestArgument(title, inputType, callback);
     }
@@ -45,9 +54,11 @@ public class Query {
 
     public void showMessage(String text, boolean isShortLength)
     {
+        closeWindow(); //Если не закрывать окно, всплывающего сообщения не будет видно
         Toast toast = Toast.makeText(macrolineAccessibilityService,
                 text, isShortLength? Toast.LENGTH_SHORT:Toast.LENGTH_LONG);
         toast.show();
+
     }
 
 

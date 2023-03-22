@@ -1,8 +1,5 @@
 package com.fielaan.macroline;
 
-import static com.fielaan.macroline.MacrolineAccessibilityService.runLuaFunc;
-import static com.fielaan.macroline.MacrolineAccessibilityService.runLuaFile;
-
 import android.graphics.Color;
 import android.os.Bundle;
 
